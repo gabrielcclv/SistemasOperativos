@@ -1,6 +1,6 @@
-# Windows 11 Lite: Edición Optimizada y Desatendida (22H2) 🚀
+# Windows 11 Lite: Edición Optimizada y Desatendida
 
-Este repositorio contiene la documentación y el proceso detallado de la creación de una imagen personalizada de **Windows 11 (Versión 22H2)**. El objetivo principal es ofrecer un sistema operativo funcional en equipos con recursos limitados (CPU y RAM) y una instalación totalmente automatizada.
+Este repositorio contiene la documentación y el proceso detallado de la creación de una imagen personalizada de **Windows 11 (Versión 22H2)**. El objetivo principal es ofrecer un sistema operativo funcional en equipos con recursos limitados (CPU y RAM) y una instalación totalmente automatizada. Link de la ISO creada: [Win11Optimizada](https://drive.google.com/drive/folders/1OpO14jZ8rFhT8iPWSzGbO2ycO2h3H4r2?dmr=1&ec=wgc-drive-globalnav-goto)
 
 ## 🎯 Objetivos de la Práctica
 
