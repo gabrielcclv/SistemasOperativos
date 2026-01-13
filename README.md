@@ -1,73 +1,84 @@
-# Windows 11 Lite: Edición Optimizada y Desatendida
+# Windows 11 Lite UDIT
 
-Este repositorio contiene la documentación y el proceso detallado de la creación de una imagen personalizada de **Windows 11 (Versión 22H2)**. El objetivo principal es ofrecer un sistema operativo funcional en equipos con recursos limitados (CPU y RAM) y una instalación totalmente automatizada. Link de la ISO creada: [Win11Optimizada](https://drive.google.com/drive/folders/1OpO14jZ8rFhT8iPWSzGbO2ycO2h3H4r2?dmr=1&ec=wgc-drive-globalnav-goto)
+Este repositorio documenta la creación de una imagen personalizada de Windows 11 22H2 con instalación desatendida, optimización offline y personalización visual. El objetivo es entregar una ISO reproducible y auditable, preparada para equipos con recursos limitados y una instalación sin interacción.
 
-## 🎯 Objetivos de la Práctica
+ISO final (si aplica): https://drive.google.com/drive/folders/1OpO14jZ8rFhT8iPWSzGbO2ycO2h3H4r2?dmr=1&ec=wgc-drive-globalnav-goto
 
-* **Optimización Extrema:** Reducir el consumo de recursos para máquinas de gama baja.
-* **Instalación Desatendida:** Configuración "Zero-Touch" que permite pasar desde el arranque hasta el escritorio de Windows sin intervención del usuario.
-* **Compatibilidad:** Bypass de requisitos oficiales de Windows 11 (TPM 2.0 y Secure Boot).
-* **Actualizaciones:** Base 22H2 preparada para soportar actualizaciones hasta la 25H2.
+## Objetivos
+- Instalar Windows 11 x64 sin interacción hasta el escritorio.
+- Crear usuario local automático con autologon.
+- Aplicar personalización visual UDIT Amber Retro.
+- Instalar aplicaciones esenciales en post-instalación.
+- Documentar todo el proceso con herramientas oficiales.
 
----
+## Herramientas verificadas
+Se utilizaron herramientas oficiales y verificadas de Microsoft para mantener compatibilidad y trazabilidad:
+- DISM (Deployment Image Servicing and Management)
+- PowerShell 5.1
+- reg.exe para ajustes de políticas offline
+- robocopy para copias consistentes de la ISO
+- oscdimg (Windows ADK) para reconstrucción de la ISO
 
-## 🛠 Herramientas y Herencia
-* **Software:** [NTLite](https://www.ntlite.com/)
-* **Imagen Base:** Windows 11 22H2 ISO Oficial.
-* **Metodología:** Basado en técnicas de eliminación selectiva de componentes para "Debloating" profundo.
+No se usaron herramientas de terceros para la modificación offline.
 
----
+## Entregables
+- README.md con el proceso y estructura del proyecto.
+- Presentación: `Sistemas Operativos.pdf`.
 
-## ⚙️ Proceso de Modificación (Paso a Paso)
+## Flujo resumido del proceso
+1. Extracción del ISO original a un directorio de trabajo.
+2. Montaje de `install.wim` y modificaciones offline con DISM.
+3. Eliminación de componentes y ajustes de privacidad.
+4. Integración de `AutoUnattend.xml` y estructura `$OEM$`.
+5. Scripts de instalación y personalización en `SetupComplete.cmd`.
+6. Reconstrucción de la ISO booteable.
 
-### 1. Eliminación de Componentes
-Se realizó una limpieza profunda para liberar espacio en disco y memoria RAM:
-* **Apps:** Eliminación del Cliente de Microsoft, Lector PDF, Windows Push-to-install, Xbox y servicios relacionados.
-* **Localización:** Se eliminaron todos los idiomas excepto **Español** (Argentina/España) y el pseudo-local de prueba.
-* **Multimedia:** Eliminación del Narrador y componentes multimedia redundantes.
-* **Seguridad:** Reducción del Centro de Seguridad (manteniendo lo esencial para la estabilidad).
+## Instalación desatendida
+- `AutoUnattend.xml` configura idioma, particionado, OOBE y creación de usuario.
+- Usuario automático: `TORETO` (Administrador).
+- Contraseña por defecto: `1234`.
+- Autologon habilitado para completar la primera sesión.
 
-### 2. Configuración y Características
-Se desactivaron funciones pesadas que consumen ciclos de CPU en segundo plano:
-* **Desactivados:** Windows Search, Work Folders Client e Imprimir en PDF de Microsoft.
-* **Energía:** Eliminación de los menús de **Hibernación** y **Suspensión** para reducir el tamaño del archivo de sistema y optimizar el apagado.
+Se recomienda cambiar la contraseña tras el primer inicio.
 
-### 3. Personalización de la Interfaz (UI)
-* **Efectos visuales:** Desactivación de animaciones para una respuesta instantánea.
-* **Barra de tareas:** Limpieza de iconos de Chat (Teams), Widgets y Centro de Notificaciones.
-* **Escritorio:** Eliminación de iconos predeterminados (Papelera, Mi Equipo, Panel de Control) y fijación de aplicaciones de la tienda.
-* **Estética:** Aplicación de **Tema Oscuro** por defecto y personalización de la paleta de colores azul.
+## Post-instalación
+- `SetupComplete.cmd` ejecuta los scripts de instalación y personalización.
+- Logs esperados en `C:\Windows\Logs\Setup`.
 
-### 4. Privacidad y Sistema
-* **Telemetría:** Desactivación total de Cortana y del envío de informes de diagnóstico a Microsoft.
-* **Instalación Automática:** Bloqueo de la instalación automática de aplicaciones patrocinadas (bloatware).
-* **Bypass de Hardware:** Desactivación del requisito de **TPM** para permitir la instalación en cualquier procesador.
-* **Optimización de Disco:** Desactivación de **SysMain** (Optimizado para SSD) y BitLocker.
+## Aplicaciones instaladas
+- 7-Zip (instalación silenciosa).
+- RetroArch (emulador arcade).
+- ROMs legales opcionales (si se incluyen en el build).
 
----
+No se instala Brave ni se configura como navegador predeterminado.
 
-## 🤖 Configuración Desatendida (Zero-Touch)
+## Personalización visual
+- Wallpapers UDIT Amber con nombres de participantes.
+- Tema retro con colores ámbar y ajustes de consola.
+- Iconos retro personalizados.
 
-Para lograr que el sistema llegue al escritorio sin clics del usuario, se configuró el apartado **Desatendido** en NTLite con los siguientes parámetros:
+## Estructura OEM
+```
+ISO_WORK
+└─ sources
+   └─ $OEM$
+      ├─ $1\Installers\...
+      └─ $$\Setup\Scripts\SetupComplete.cmd
+```
 
-| Sección | Configuración |
-| :--- | :--- |
-| **Idioma Local** | Español (Argentina) |
-| **Idioma Interfaz** | Español (España) |
-| **EULA** | Omitir página de licencia automáticamente |
-| **Privacidad** | Omitir todas las páginas de configuración de privacidad (OOBE) |
-| **Cuenta de Usuario** | Creación automática de cuenta local con privilegios de Administrador |
-| **Telemetría** | Configurada como "Falso" (Desactivada) |
+`$1` se copia a `C:\` y `$$` a `C:\Windows` durante la instalación.
 
----
+## Reconstrucción de la ISO
+Ejemplo con Windows ADK:
+```
+oscdimg.exe -m -o -u2 -udfver102 -bootdata:2#p0,e,b"ISO_WORK\boot\etfsboot.com"#pEF,e,b"ISO_WORK\efi\microsoft\boot\efisys.bin" "ISO_WORK" "Win11_UDIT.iso"
+```
 
-## 🚀 Resultado Final
-El resultado es una imagen ISO altamente eficiente que:
-1.  Arranca en equipos antiguos sin errores de compatibilidad.
-2.  No solicita ninguna configuración durante la instalación.
-3.  Inicia directamente en el escritorio con un consumo de RAM significativamente inferior a la versión comercial.
+## Pruebas recomendadas
+- Probar en VM con UEFI antes de usar en hardware real.
+- Confirmar autologon de TORETO y aplicación de tema.
+- Validar instalación de 7-Zip y RetroArch.
+- Revisar logs en `C:\Windows\Logs\Setup`.
 
----
-
-## ⚠️ Notas
-> Una vez creada e instalada la imagen, los componentes eliminados **no pueden volver a agregarse**. Esta distribución está pensada para entornos de máximo rendimiento y minimalismo.
+## Créditos
+Autores: Andrea, Gabriel, Alejandro
